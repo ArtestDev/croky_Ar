@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+  <script src="https://unpkg.com/mind-ar@1.2.5/dist/mindar-image.prod.js"></script>
+  <script src="https://unpkg.com/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/aframe-extras@7.5.0/dist/aframe-extras.min.js"></script>
+
+
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>prueba croky ar</title>
+</head>
+
+<body>
+  <a-scene mindar-image="imageTargetSrc: targets_croky.mind; filterMinCF: 0.0001; filterBeta: 0.1;"
+    vr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: false">
+    <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
+
+    <a-assets>
+      <!-- https://raw.githubusercontent.com/ArtestDev/Artest_web.github.io/main/Artest_models/Artest.glb -->
+      <a-asset-item id="croky" src="modelos/Croky_PC.glb"></a-asset-item>
+
+      <img id="croky-textura" src="modelos/TEX/Croky/MAT_Base_color_3.png">
+    </a-assets>
+
+
+
+    <a-entity mindar-image-target="targetIndex: 0" id="target-croky">
+      <a-plane color="blue" opacity="0.5" position="0 0 0" height="0.552" width="1" rotation="0 0 0"></a-plane>
+      <a-gltf-model rotation="90 0 0 " position="0 0 0" scale="0.0009 0.0009 0.0009" src="#croky" animation-mixer>
+    </a-entity>
+
+  </a-scene>
+
+  <script>
+    console.log(AFRAME.components["animation-mixer"]);
+    document.querySelector('#croky')
+      .addEventListener('model-loaded', (event) => {
+
+        console.log(
+          event.detail.model.animations.map(
+            animation => animation.name
+          )
+        );
+
+      });
+    const modelo = document.querySelector('#croky');
+
+    const target = document.querySelector('#target-croky');
+
+
+    target.addEventListener('targetFound', () => {
+
+      modelo.setAttribute(
+        'animation-mixer',
+        'clip: Idle; loop: repeat'
+      );
+
+    });
+
+    target.addEventListener('targetLost', () => {
+
+      modelo.removeAttribute('animation-mixer');
+
+    });
+  </script>
+
+</body>
+
+</html>
